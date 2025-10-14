@@ -1,6 +1,6 @@
-# Lectia6_Grup1
+# Lectia10_Grup1
 
-**Lectia 6 – Varianta Grupul 1**
+**Lectia 10 – Varianta Grupul 1**
 
 ---
 
