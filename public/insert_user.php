@@ -14,10 +14,18 @@ $age = '';
 // Verificăm dacă cererea este de tip POST (adică formularul a fost trimis)
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
-    // Preluarea și curățarea datelor din formular. Folosim htmlspecialchars() pentru XSS.
-    $username = isset($_POST['username']) ? htmlspecialchars(trim($_POST['username'])) : '';
-    $email = isset($_POST['email']) ? htmlspecialchars(trim($_POST['email'])) : '';
-    $age = isset($_POST['age']) ? intval($_POST['age']) : 0; 
+    // Preluarea și curățarea datelor din formular.
+    $username = isset($_POST['username']) ? trim($_POST['username']) : '';
+    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+    $age = isset($_POST['age']) ? intval($_POST['age']) : 0;
+    
+    // Eliminare caractere speciale si securizare;
+    $username = mysqli_real_escape_string($conn, preg_replace('/[^a-zA-Z0-9\s]/', '', $username));
+    $email = mysqli_real_escape_string($conn, preg_replace('/[^a-zA-Z0-9\.@]/', '', filter_var($email, FILTER_SANITIZE_EMAIL)));
+
+    //Folosim htmlspecialchars() pentru XSS.
+    $username = htmlspecialchars($username);
+    $email = htmlspecialchars($email);
     
     // Validare de bază
     if (empty($username) || empty($email) || empty($age)) {
@@ -33,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         // Pregătirea interogării INSERT
         $sql = "INSERT INTO users (username, email, age) VALUES (?, ?, ?)";
-
         $stmt = mysqli_prepare($conn, $sql);
 
         if ($stmt === false) {
@@ -89,8 +96,8 @@ mysqli_close($conn);
     // Afișarea mesajului de răspuns
     if (!empty($message)): 
     ?>
-        <div class="message <?php echo $message_type; ?>">
-            <?php echo $message; ?>
+        <div class="message <?= $message_type; ?>">
+            <?= $message; ?>
         </div>
     <?php 
     endif; 
@@ -100,15 +107,15 @@ mysqli_close($conn);
         
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required 
-               value="<?php echo htmlspecialchars($username); ?>">
+               value="<?= htmlspecialchars($username); ?>">
         
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required
-               value="<?php echo htmlspecialchars($email); ?>">
+               value="<?= htmlspecialchars($email); ?>">
         
         <label for="age">Age:</label>
         <input type="number" id="age" name="age" required min="1" max="120"
-               value="<?php echo htmlspecialchars($age); ?>">
+               value="<?= htmlspecialchars($age); ?>">
         
         <button type="submit" name="submit_user">Înregistrează Utilizatorul</button>
     </form>
