@@ -2,8 +2,18 @@
     // Includeți conexiunea
     require_once 'connection_procedural.php';
 
-    // Exemplu de email cautat
-    $searchTerm = '%@gmail%';
+    // Exemplu de email cautat cu wildacard '%' inseamna orice sir de caractere, wildcard-urile sunt folosite in SQL pentru a inlocui orice sir de caractere
+    // Implicit cautam toate emailurile care contin '@gmail'
+    $searchTerm = '%@%';
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['search'])) {
+        // Preluarea termenului de căutare din formular
+        $input = htmlspecialchars(trim($_POST['search'], "\s%")); // Curățare și eliminare wildcard-uri existente
+        $input = preg_replace('/[^a-zA-Z0-9\.@]/', '', $input); // Eliminare caractere speciale
+        $input = mysqli_real_escape_string($conn, $input); // Securizarea împotriva SQL Injection
+        // Adăugarea wildcard-urilor pentru LIKE
+        $searchTerm = '%' . $input . '%';
+    }
 
     // Folosirea mysqli_prepare() (pregatirea interogarii catre baza de date)
     $stmt = mysqli_prepare($conn, "SELECT * FROM users WHERE email LIKE ?");
@@ -15,6 +25,7 @@
 
     // Folosirea mysqli_stmt_bind_param() pentru a introduce date reale in loc de "?"
     // 's' = string, indicând tipul de date al variabilei $searchTerm
+    // Securizarea împotriva SQL Injection
     mysqli_stmt_bind_param($stmt, 's', $searchTerm);
 
     // 2. Executarea interogarii mysqli_stmt_execute()
@@ -67,6 +78,12 @@
 </head>
 
 <body>
+
+    <form action="" method="post">
+        <label for="search">Caută email (LIKE):</label>
+        <input type="text" id="search" name="search" placeholder="@gmail">
+        <button type="submit">Caută</button>
+    </form>
 
     <h2>Utilizatori cu email LIKE '<?php echo htmlspecialchars($searchTerm); ?>' (Procedural)</h2>
 
