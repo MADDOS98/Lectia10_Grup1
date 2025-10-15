@@ -4,6 +4,17 @@
 
 ---
 
+- **config.php** 
+  Configuratia (datele) pentru conectare
+
+- **public** 
+  Directoriul cu file-urile la sarcini
+
+- **database.php** 
+  File care este pentru a verifica daca este baza de date, si in caz contrar sa o creeze.
+
+---
+
 ## Avantaje și Limitări – Stil Procedural `mysqli`
 
 ### Avantajele Stilului Procedural (`mysqli`)

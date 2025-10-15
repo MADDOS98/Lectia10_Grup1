@@ -12,8 +12,8 @@ $conn = mysqli_connect($host, $user, $pass, $db_name);
 // Verificarea erorii de conexiune cu mysqli_connect_errno() care returneaza codul erorii
 if (mysqli_connect_errno()) {
     // Terminarea scriptului cu un mesaj de eroare
-    die("Eroare de conectare la baza de date: " . mysqli_connect_error() . 
-        " (Cod: " . mysqli_connect_errno() . ")");
+    die("Eroare de conectare la baza de date: " . mysqli_connect_error() . // Mesajul erorii
+        " (Cod: " . mysqli_connect_errno() . ")"); // Codul erorii
 }
 
 // Schimbarea charset cu mysqli_set_charset() pentru a evita probleme cu diacriticele

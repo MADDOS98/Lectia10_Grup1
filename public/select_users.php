@@ -79,13 +79,15 @@
 
 <body>
 
+    <!-- Forma cu input in care poti sa dai termenul de cautat -->
     <form action="" method="post">
         <label for="search">Caută email (LIKE):</label>
         <input type="text" id="search" name="search" placeholder="@gmail">
         <button type="submit">Caută</button>
     </form>
-
-    <h2>Utilizatori cu email LIKE '<?php echo htmlspecialchars($searchTerm); ?>' (Procedural)</h2>
+    
+    <!-- Prin $searchTerm se pune termenul cautat in moment in baza -->
+    <h2>Utilizatori cu email LIKE '<?= htmlspecialchars($searchTerm); ?>' (Procedural)</h2>
 
     <table>
         <thead>
@@ -97,7 +99,9 @@
             </tr>
         </thead>
         <tbody>
+            <!-- Verifica daca este mai mult de un rand in rezultat -->
             <?php if (mysqli_num_rows($res) > 0): ?>
+                <!-- Ia din rezultat cate un rand si il face in tabel asociativ din care se extrag datele -->
                 <?php while ($row = mysqli_fetch_assoc($res)): ?>
                     <tr>
                         <td><?= htmlspecialchars($row['id']); ?></td>

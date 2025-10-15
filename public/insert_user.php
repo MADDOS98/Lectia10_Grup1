@@ -15,9 +15,9 @@ $age = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     // Preluarea și curățarea datelor din formular.
-    $username = isset($_POST['username']) ? trim($_POST['username']) : '';
-    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
-    $age = isset($_POST['age']) ? intval($_POST['age']) : 0;
+    $username = isset($_POST['username']) ? trim($_POST['username']) : ''; // Curățare spații albe
+    $email = isset($_POST['email']) ? trim($_POST['email']) : ''; // Curățare spații albe
+    $age = isset($_POST['age']) ? intval($_POST['age']) : 0; // Convertim la integer
     
     // Eliminare caractere speciale si securizare;
     $username = mysqli_real_escape_string($conn, preg_replace('/[^a-zA-Z0-9\s]/', '', $username));
@@ -28,13 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = htmlspecialchars($email);
     
     // Validare de bază
+    // Verificăm dacă toate câmpurile sunt completate
     if (empty($username) || empty($email) || empty($age)) {
         $message = "Eroare: Toate câmpurile (Username, Email, Age) sunt obligatorii.";
         $message_type = 'error';
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) { // Validare email
         $message = "Eroare: Adresa de email nu este validă.";
         $message_type = 'error';
-    } elseif ($age < 1 || $age > 120) {
+    } elseif ($age < 1 || $age > 120) { // Validare vârstă
         $message = "Eroare: Vârsta trebuie să fie o valoare între 1 și 120.";
         $message_type = 'error';
     } else {
@@ -43,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = "INSERT INTO users (username, email, age) VALUES (?, ?, ?)";
         $stmt = mysqli_prepare($conn, $sql);
 
+        // Verificarea erorilor de pregătire
         if (mysqli_errno($conn)) {
             $message = "Eroare la pregătirea interogării: " . mysqli_error($conn);
             $message_type = 'error';
@@ -52,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // Executarea interogării
             $result = mysqli_stmt_execute($stmt);
-            // Verificarea erorilor
+            // Verificarea erorilor de execuție
             if (!mysqli_errno($conn)) {
                 $message = "Utilizator inserat cu succes! ID: " . mysqli_insert_id($conn) . " | Email: " . $email;
                 $message_type = 'success';
@@ -104,7 +106,7 @@ mysqli_close($conn);
     ?>
 
     <form method="POST" action="">
-        
+        <!-- Se pun datele trimise la campuri in caz de erori, cu htmlspecialchars() pentru a evita XSS -->
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required 
                value="<?= htmlspecialchars($username); ?>">
@@ -117,7 +119,7 @@ mysqli_close($conn);
         <input type="number" id="age" name="age" required min="1" max="120"
                value="<?= htmlspecialchars($age); ?>">
         <br>
-        <button type="submit" name="submit_user">Înregistrează Utilizatorul</button>
+        <button type="submit">Înregistrează Utilizatorul</button>
     </form>
 
 </body>
