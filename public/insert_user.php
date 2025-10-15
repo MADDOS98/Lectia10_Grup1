@@ -90,7 +90,7 @@ mysqli_close($conn);
 </head>
 <body>
 
-    <h2>Adăugare Utilizator Nou (Simplificat)</h2>
+    <h2>Adăugare Utilizator Nou</h2>
     
     <?php 
     // Afișarea mesajului de răspuns
