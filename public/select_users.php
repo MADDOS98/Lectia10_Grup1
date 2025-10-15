@@ -8,7 +8,7 @@
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['search'])) {
         // Preluarea termenului de căutare din formular
-        $input = htmlspecialchars(trim($_POST['search'], "\s%")); // Curățare și eliminare wildcard-uri existente
+        $input = trim($_POST['search'], "\s%"); // Curățare și eliminare wildcard-uri existente
         $input = preg_replace('/[^a-zA-Z0-9\.@]/', '', $input); // Eliminare caractere speciale
         $input = mysqli_real_escape_string($conn, $input); // Securizarea împotriva SQL Injection
         // Adăugarea wildcard-urilor pentru LIKE
