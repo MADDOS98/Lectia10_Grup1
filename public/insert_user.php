@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = "INSERT INTO users (username, email, age) VALUES (?, ?, ?)";
         $stmt = mysqli_prepare($conn, $sql);
 
-        if ($stmt === false) {
+        if (mysqli_errno($conn)) {
             $message = "Eroare la pregătirea interogării: " . mysqli_error($conn);
             $message_type = 'error';
         } else {
@@ -52,8 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // Executarea interogării
             $result = mysqli_stmt_execute($stmt);
-
-            if ($result) {
+            // Verificarea erorilor
+            if (!mysqli_errno($conn)) {
                 $message = "Utilizator inserat cu succes! ID: " . mysqli_insert_id($conn) . " | Email: " . $email;
                 $message_type = 'success';
                 
@@ -116,7 +116,7 @@ mysqli_close($conn);
         <label for="age">Age:</label>
         <input type="number" id="age" name="age" required min="1" max="120"
                value="<?= htmlspecialchars($age); ?>">
-        
+        <br>
         <button type="submit" name="submit_user">Înregistrează Utilizatorul</button>
     </form>
 

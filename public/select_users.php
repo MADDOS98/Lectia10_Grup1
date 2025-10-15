@@ -3,7 +3,7 @@
     require_once 'connection_procedural.php';
 
     // Exemplu de email cautat cu wildacard '%' inseamna orice sir de caractere, wildcard-urile sunt folosite in SQL pentru a inlocui orice sir de caractere
-    // Implicit cautam toate emailurile care contin '@gmail'
+    // Implicit cautam toate emailurile care contin '@'
     $searchTerm = '%@%';
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['search'])) {
@@ -19,7 +19,7 @@
     $stmt = mysqli_prepare($conn, "SELECT * FROM users WHERE email LIKE ?");
 
     // Verificam daca pregatirea este
-    if ($stmt === false) {
+    if (mysqli_errno($conn)) {
         die("Eroare la pregătirea interogării: " . mysqli_error($conn));
     }
 
@@ -32,7 +32,7 @@
     $result = mysqli_stmt_execute($stmt);
 
     // Verificam daca am obtinut rezultatul
-    if ($result === false) {
+    if (mysqli_errno($conn)) {
         die("Eroare la executarea interogării: " . mysqli_stmt_error($stmt));
     }
 
