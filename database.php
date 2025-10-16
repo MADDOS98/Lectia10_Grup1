@@ -56,7 +56,7 @@ if (mysqli_num_rows($result) > 0) {
                 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 username VARCHAR(70) NOT NULL,
                 email VARCHAR(120) NOT NULL UNIQUE,
-                age INT(3) UNSIGNED,
+                age INT(3) UNSIGNED
             )
         ";
 
