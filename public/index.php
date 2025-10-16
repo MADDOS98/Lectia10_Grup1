@@ -32,7 +32,6 @@
 </head>
 <body>
   
-    <a href="../database.php" class="buton-link">Verifica baza de date (database.php)</a>
     <a href="connection_procedural.php" class="buton-link">Verifica conexiunea (connection_procedural.php)</a>
     <a href="select_users.php" class="buton-link">Selecteaza utilizatorii (select_users.php)</a>
     <a href="insert_user.php" class="buton-link">Adauga utilizatori (insert_user.php)</a>
